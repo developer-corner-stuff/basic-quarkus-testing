@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.toSet;
 
 @Transactional
 @ApplicationScoped
-public class LibraryService {
+public class BookService {
 
     @Inject
     BookRepository bookRepository;
@@ -22,5 +22,13 @@ public class LibraryService {
             return bookRepository.findAll().stream().collect(toSet());
         }
         return bookRepository.findBy(query).collect(toSet());
+    }
+
+    public Book findById(Long id) {
+        return bookRepository.findById(id);
+    }
+
+    public void add(Book book) {
+        bookRepository.persist(book);
     }
 }
