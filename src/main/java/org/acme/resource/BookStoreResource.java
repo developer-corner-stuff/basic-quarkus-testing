@@ -50,4 +50,15 @@ public class BookStoreResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+
+    @DELETE
+    @Path("/book/{id}")
+    public Response remove(@PathParam("id") Long bookId) {
+        var isRemoved = bookService.remove(bookId);
+        if (!isRemoved) {
+            return Response.notModified().build();
+        }
+
+        return Response.noContent().build();
+    }
 }

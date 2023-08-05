@@ -18,7 +18,7 @@ public class BookRepository implements PanacheRepository<Book> {
     }
 
     public Optional<Book> update(Book book) {
-        var updateBook = this.findByIdOptional(book.id);
+        var updateBook = this.findByIdOptional(book.getId());
         if (updateBook.isEmpty()){
             return Optional.empty();
         }

@@ -10,10 +10,18 @@ import jakarta.persistence.*;
 @Cacheable
 public class Book extends PanacheEntityBase {
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_seq")
     @SequenceGenerator(name = "book_id_seq", sequenceName = "book_sequence", initialValue = 1, allocationSize = 1)
-    public Long id;
+    private Long id;
 
 
     private String title;

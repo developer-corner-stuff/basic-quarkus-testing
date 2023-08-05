@@ -36,7 +36,11 @@ public class BookService {
     }
 
     public Book update(Long bookId, Book book) {
-        book.id = bookId;
+        book.setId(bookId);
         return bookRepository.update(book).orElseThrow(() -> new InvalidParameterException("Book not found"));
+    }
+
+    public boolean remove(Long bookId) {
+        return bookRepository.deleteById(bookId);
     }
 }

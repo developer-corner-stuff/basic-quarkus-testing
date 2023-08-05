@@ -7,6 +7,7 @@ import io.restassured.http.ContentType;
 import org.acme.model.Book;
 import org.acme.resource.BookStoreResource;
 import org.apache.commons.io.IOUtils;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ public class BookStoreResourceTest {
                 .extract()
                 .body().as(Book.class);
         assertNotNull(book);
-        assertNotNull(book.id);
+        assertNotNull(book.getId());
     }
 
     @Test
@@ -74,7 +75,7 @@ public class BookStoreResourceTest {
                 .extract()
                 .body().as(Book.class);
         assertNotNull(book);
-        assertEquals(4L, book.id);
+        assertEquals(4L, book.getId());
 
         book.setTitle("The Invisible Man");
 
@@ -116,7 +117,18 @@ public class BookStoreResourceTest {
                 .extract()
                 .body().as(Book.class);
         assertNotNull(book);
-        assertEquals(3L, book.id);
+        assertEquals(3L, book.getId());
+    }
+
+    @Test
+    @Order(6)
+    void removeBookById() {
+        given()
+                .contentType("application/json")
+                .when()
+                .delete("/book/4")
+                .then()
+                .statusCode(204);
     }
 
 }
