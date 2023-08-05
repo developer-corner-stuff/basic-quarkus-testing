@@ -1,4 +1,4 @@
-package org.acme;
+package org.acme.resource;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -7,6 +7,8 @@ import jakarta.ws.rs.core.Response;
 import org.acme.model.Book;
 import org.acme.service.BookService;
 
+import java.security.InvalidParameterException;
+import java.util.Map;
 import java.util.Set;
 
 @Path("/bookStore")
@@ -32,7 +34,20 @@ public class BookStoreResource {
     @POST
     @Path("/book")
     public Response create(Book book) {
-        bookService.add(book);
+        bookService.create(book);
         return Response.ok(book).status(201).build();
+    }
+
+    @PUT
+    @Path("/book/{id}")
+    public Response update(@PathParam("id") Long bookId, Book book) {
+        try {
+            return Response.ok(bookService.update(bookId, book)).build();
+        } catch (Exception ex) {
+            if (ex instanceof InvalidParameterException){
+                return Response.status(Response.Status.NOT_FOUND).entity(Map.of("message", ex.getMessage())).build();
+            }
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
     }
 }

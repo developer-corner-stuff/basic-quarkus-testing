@@ -6,6 +6,9 @@ import org.acme.model.Book;
 import org.acme.repository.BookRepository;
 
 import jakarta.inject.Inject;
+
+import java.security.InvalidParameterException;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
@@ -28,7 +31,12 @@ public class BookService {
         return bookRepository.findById(id);
     }
 
-    public void add(Book book) {
+    public void create(Book book) {
         bookRepository.persist(book);
+    }
+
+    public Book update(Long bookId, Book book) {
+        book.id = bookId;
+        return bookRepository.update(book).orElseThrow(() -> new InvalidParameterException("Book not found"));
     }
 }

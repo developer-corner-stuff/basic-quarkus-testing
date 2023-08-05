@@ -5,6 +5,7 @@ import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.acme.model.Book;
+import org.acme.resource.BookStoreResource;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -55,7 +56,7 @@ public class BookStoreResourceTest {
 
     @Test
     @Order(2)
-    void getBooksWithQueryParam() {
+    void getBookWithQueryParamByTitle() {
         given().contentType(ContentType.JSON).param("query", "Neuromancer")
                 .then().statusCode(200)
                 .body("size()", is(1))
@@ -65,16 +66,7 @@ public class BookStoreResourceTest {
 
     @Test
     @Order(3)
-    void getBookById() {
-        given().get("/book/{id}", 1L)
-                .then()
-                .statusCode(200)
-                .body("id", notNullValue());
-    }
-
-    @Test
-    @Order(4)
-    void getBookByIdAlt() {
+    void updateBookById() {
         Book book = given()
                 .when().get("/book/4")
                 .then()
@@ -83,6 +75,48 @@ public class BookStoreResourceTest {
                 .body().as(Book.class);
         assertNotNull(book);
         assertEquals(4L, book.id);
+
+        book.setTitle("The Invisible Man");
+
+        given()
+                .contentType("application/json")
+                .body(book)
+                .when()
+                .put("/book/4")
+                .then()
+                .statusCode(200);
+
+        Book updatedBook = given()
+                .when().get("/book/4")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body().as(Book.class);
+        assertNotNull(updatedBook);
+        assertEquals("The Invisible Man", book.getTitle());
+
+    }
+
+    @Test
+    @Order(4)
+    void getBookById() {
+        given().get("/book/{id}", 1L)
+                .then()
+                .statusCode(200)
+                .body("id", notNullValue());
+    }
+
+    @Test
+    @Order(5)
+    void getBookByIdAlt() {
+        Book book = given()
+                .when().get("/book/3")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body().as(Book.class);
+        assertNotNull(book);
+        assertEquals(3L, book.id);
     }
 
 }
