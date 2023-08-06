@@ -5,9 +5,8 @@ import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.acme.model.Book;
-import org.acme.resource.BookStoreResource;
+import org.acme.resource.BookResource;
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -24,11 +23,11 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-@TestHTTPEndpoint(BookStoreResource.class)
+@TestHTTPEndpoint(BookResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BookStoreResourceTest {
+public class BookResourceTest {
 
-    @TestHTTPEndpoint(BookStoreResource.class)
+    @TestHTTPEndpoint(BookResource.class)
     @TestHTTPResource("book")
     URL bookStoreEndpoint;
 

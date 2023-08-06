@@ -14,7 +14,7 @@ import java.util.Set;
 @Path("/bookStore")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class BookStoreResource {
+public class BookResource {
 
     @Inject
     BookService bookService;
