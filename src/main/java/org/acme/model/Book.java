@@ -1,5 +1,6 @@
 package org.acme.model;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;

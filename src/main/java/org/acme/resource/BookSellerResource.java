@@ -5,44 +5,46 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.model.Book;
+import org.acme.model.BookSeller;
+import org.acme.service.BookSellerService;
 import org.acme.service.BookService;
 
 import java.security.InvalidParameterException;
 import java.util.Map;
 import java.util.Set;
 
-@Path("/book")
+@Path("/bookseller")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class BookResource {
+public class BookSellerResource {
 
     @Inject
-    BookService bookService;
+    BookSellerService bookSellerService;
 
     @GET
     @Path("/")
-    public Set getBooks(@QueryParam("query") String query) {
-        return bookService.find(query);
+    public Set getBookSellers(@QueryParam("query") String query) {
+        return bookSellerService.find(query);
     }
 
     @GET
     @Path("/{id}")
-    public Book getBookById(@PathParam("id") Long id) {
-        return bookService.findById(id);
+    public BookSeller getBookSellerById(@PathParam("id") Long id) {
+        return bookSellerService.findById(id);
     }
 
     @POST
     @Path("/")
-    public Response create(Book book) {
-        bookService.create(book);
-        return Response.ok(book).status(201).build();
+    public Response create(BookSeller bookSeller) {
+        bookSellerService.create(bookSeller);
+        return Response.ok(bookSeller).status(201).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Long bookId, Book book) {
+    public Response update(@PathParam("id") Long bookSellerId, BookSeller bookSeller) {
         try {
-            return Response.ok(bookService.update(bookId, book)).build();
+            return Response.ok(bookSellerService.update(bookSellerId, bookSeller)).build();
         } catch (Exception ex) {
             if (ex instanceof InvalidParameterException){
                 return Response.status(Response.Status.NOT_FOUND).entity(Map.of("message", ex.getMessage())).build();
@@ -53,12 +55,14 @@ public class BookResource {
 
     @DELETE
     @Path("/{id}")
-    public Response remove(@PathParam("id") Long bookId) {
-        var isRemoved = bookService.remove(bookId);
+    public Response remove(@PathParam("id") Long bookSellerId) {
+        var isRemoved = bookSellerService.remove(bookSellerId);
         if (!isRemoved) {
             return Response.notModified().build();
         }
 
         return Response.noContent().build();
     }
+
+
 }

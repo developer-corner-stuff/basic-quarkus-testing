@@ -4,8 +4,8 @@ import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
-import org.acme.model.Book;
-import org.acme.resource.BookResource;
+import org.acme.model.BookSeller;
+import org.acme.resource.BookSellerResource;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -23,83 +23,83 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-@TestHTTPEndpoint(BookResource.class)
+@TestHTTPEndpoint(BookSellerResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BookResourceTest {
+public class BookSellerResourceTest {
 
-    @TestHTTPEndpoint(BookResource.class)
+    @TestHTTPEndpoint(BookSellerResource.class)
     @TestHTTPResource("")
-    URL bookResourceEndpoint;
+    URL bookSellerResourceEndpoint;
 
     @Test
-    void getBooksAuthorShouldBeFound() throws IOException {
-        assertTrue(IOUtils.toString(bookResourceEndpoint.openStream(), Charset.defaultCharset()).contains("Isaac Asimov"));
+    void getBookSellerShouldBeFound() throws IOException {
+        assertTrue(IOUtils.toString(bookSellerResourceEndpoint.openStream(), Charset.defaultCharset()).contains("Strand"));
     }
 
     @Test
     @Order(1)
-    void createBook() {
-        Book newBook = new Book();
-        newBook.setAuthor("William Gibson");
-        newBook.setTitle("Neuromancer");
-        Book book = given()
-                .body(newBook)
+    void createBookSeller() {
+        BookSeller newBookSeller = new BookSeller();
+        newBookSeller.setName("Strand");
+        newBookSeller.setDescription("Unique East Village Bookstore");
+        BookSeller bookSeller = given()
+                .body(newBookSeller)
                 .contentType(ContentType.JSON)
                 .when().post("/")
                 .then()
                 .statusCode(201)
                 .extract()
-                .body().as(Book.class);
-        assertNotNull(book);
-        assertNotNull(book.getId());
+                .body().as(BookSeller.class);
+        assertNotNull(bookSeller);
+        assertNotNull(bookSeller.getId());
     }
 
     @Test
     @Order(2)
-    void getBookWithQueryParamByTitle() {
-        given().contentType(ContentType.JSON).param("query", "Neuromancer")
+    void getBookSellerWithQueryParamByTitle() {
+        given().contentType(ContentType.JSON).param("query", "Strand")
                 .then().statusCode(200)
                 .body("size()", is(1))
-                .body("title", hasItem("Neuromancer"))
-                .body("author", hasItem("William Gibson"));
+                .body("name", hasItem("Strand"))
+                .body("Description", hasItem("Unique East Village Bookstore"));
     }
 
     @Test
     @Order(3)
-    void updateBookById() {
-        Book book = given()
+    void updateBookSellerById() {
+        BookSeller bookSeller = given()
                 .when().get("/4")
                 .then()
                 .statusCode(200)
                 .extract()
-                .body().as(Book.class);
-        assertNotNull(book);
-        assertEquals(4L, book.getId());
+                .body().as(BookSeller.class);
+        assertNotNull(bookSeller);
+        assertEquals(4L, bookSeller.getId());
 
-        book.setTitle("The Invisible Man");
+        bookSeller.setDescription("Indie bookstore with " + bookSeller.getDescription());
 
         given()
                 .contentType("application/json")
-                .body(book)
+                .body(bookSeller)
                 .when()
                 .put("/4")
                 .then()
                 .statusCode(200);
 
-        Book updatedBook = given()
+        BookSeller updatedBookSeller = given()
                 .when().get("/4")
                 .then()
                 .statusCode(200)
                 .extract()
-                .body().as(Book.class);
-        assertNotNull(updatedBook);
-        assertEquals("The Invisible Man", book.getTitle());
+                .body().as(BookSeller.class);
+        assertNotNull(updatedBookSeller);
+        assertEquals("Indie bookstore with Art books by the pound", bookSeller.getDescription());
 
     }
 
     @Test
     @Order(4)
-    void getBookById() {
+    void getBookSellerById() {
         given().get("/{id}", 1L)
                 .then()
                 .statusCode(200)
@@ -108,20 +108,20 @@ public class BookResourceTest {
 
     @Test
     @Order(5)
-    void getBookByIdAlt() {
-        Book book = given()
+    void getBookSellerByIdAlt() {
+        BookSeller bookSeller = given()
                 .when().get("/3")
                 .then()
                 .statusCode(200)
                 .extract()
-                .body().as(Book.class);
-        assertNotNull(book);
-        assertEquals(3L, book.getId());
+                .body().as(BookSeller.class);
+        assertNotNull(bookSeller);
+        assertEquals(3L, bookSeller.getId());
     }
 
     @Test
     @Order(6)
-    void removeBookById() {
+    void removeBookSellerById() {
         given()
                 .contentType("application/json")
                 .when()
