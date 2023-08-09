@@ -32,6 +32,11 @@ public class Book extends PanacheEntityBase {
 
     }
 
+    public Book(String title, String author) {
+        this.author = author;
+        this.title = title;
+    }
+
     public String getTitle() {
         return this.title;
     }
