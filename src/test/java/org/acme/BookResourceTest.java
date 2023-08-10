@@ -17,6 +17,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.notNullValue;
@@ -27,13 +28,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BookResourceTest {
 
-    @TestHTTPEndpoint(BookResource.class)
-    @TestHTTPResource("")
-    URL bookResourceEndpoint;
+
 
     @Test
-    void getBooksAuthorShouldBeFound() throws IOException {
-        assertTrue(IOUtils.toString(bookResourceEndpoint.openStream(), Charset.defaultCharset()).contains("Isaac Asimov"));
+    void getAllBooks() {
+        given().contentType(ContentType.JSON)
+                .when().get("/")
+                .then()
+                .statusCode(200)
+                .body("size()", is(4))
+                .body("author", hasItems("Cixin Liu", "Isaac Asimov"));
+
     }
 
     @Test
