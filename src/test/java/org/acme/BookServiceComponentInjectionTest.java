@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 // Tests injection into a test
 @QuarkusTest
-public class BookServiceInjectionTest {
+public class BookServiceComponentInjectionTest {
 
     @Inject
     BookService bookService;

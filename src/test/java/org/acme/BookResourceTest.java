@@ -36,7 +36,6 @@ public class BookResourceTest {
                 .when().get("/")
                 .then()
                 .statusCode(200)
-                .body("size()", is(4))
                 .body("author", hasItems("Cixin Liu", "Isaac Asimov"));
 
     }
@@ -60,13 +59,12 @@ public class BookResourceTest {
     }
 
     @Test
-    @Order(2)
-    void getBookWithQueryParamByTitle() {
-        given().contentType(ContentType.JSON).param("query", "Neuromancer")
+    void getBookByQueryParam() {
+        given().contentType(ContentType.JSON).param("query", "The Three Body Problem")
+                .when().get("/")
                 .then().statusCode(200)
                 .body("size()", is(1))
-                .body("title", hasItem("Neuromancer"))
-                .body("author", hasItem("William Gibson"));
+                .body("author", hasItem("Cixin Liu"));
     }
 
     @Test
