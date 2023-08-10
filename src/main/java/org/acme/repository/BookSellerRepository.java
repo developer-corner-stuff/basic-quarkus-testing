@@ -5,7 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.acme.model.Book;
 import org.acme.model.BookSeller;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.Optional;
 import java.util.stream.Stream;
 

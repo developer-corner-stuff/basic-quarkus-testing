@@ -4,10 +4,9 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.acme.model.Book;
 import org.acme.model.BookSeller;
 import org.acme.service.BookSellerService;
-import org.acme.service.BookService;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.security.InvalidParameterException;
 import java.util.Map;
@@ -63,6 +62,5 @@ public class BookSellerResource {
 
         return Response.noContent().build();
     }
-
 
 }
